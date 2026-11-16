@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQSA AI</title>
+</head>
+<body style="background:#101522;color:white;text-align:center;padding:30px;font-family:Arial">
+  <h1>AQSA AI</h1>
+  <p>Welcome to AQSA AI</p>
+  <input id="message" placeholder="अपना सवाल लिखें">
+  <button onclick="sendMessage()">Send</button>
+  <div id="reply"></div>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById("message").value;
+      const reply = document.getElementById("reply");
+      reply.textContent = "जवाब आ रहा है...";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({message})
+        });
+        const data = await res.json();
+        reply.textContent = data.reply || data.output_text || data.error || "जवाब नहीं मिला";
+      } catch {
+        reply.textContent = "Server connection error";
+      }
+    }
+  </script>
+</body>
+</html>
